@@ -2,7 +2,7 @@
 
 Welcome to the Python Basics tutorial repository. This collection of concise, well-commented example scripts is designed for beginners and intermediate learners who want to build a solid foundation in Python programming, from variables and control flow to functions, data structures, and OOP concepts.
 
-## What you'll learn
+## What you'll learns
 
 - Core language concepts: data types, variables, expressions, and operators
 - Control flow: conditionals and loops
