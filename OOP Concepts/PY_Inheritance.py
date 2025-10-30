@@ -31,8 +31,9 @@ class BankAccount:
     
 
 """
-The code above dosen't directly use inheritance or does not inherit from any explicit parent or base class.
-But even if a class does not explicitly inherit from another class, it implicitly inherits from the built-in object class in Python.
+The code above dosen't directly use inheritance or does not inherit from any explicit parent 
+or base class. But even if a class does not explicitly inherit from another class, 
+it implicitly inherits from the built-in object class in Python.
 
 So internally, class is treated like:
     class class_name(object):
@@ -197,6 +198,8 @@ class Serializable:
     def to_json(self):
         import json
         return json.dumps(self.__dict__)
+    # dumps() method converts a Python object into a JSON string. 
+    # self.__dict__ is a dictionary representation of the object's attributes like {attribute_name: attribute_value}
 
 
 class Validatable:
@@ -221,6 +224,8 @@ acc = BankAccount("123456", 1000)
 print(acc.to_json())
 # Output:
 # Log: BankAccount created
+# Validation succeeded
+# {"account_number": "123456", "balance": 1000}
 
 
 """
@@ -261,7 +266,7 @@ Python uses C3 linearization to determine method lookup order. It resolves in a 
 
     -> Child before Parent (D before B before C before A)
 
-    -> Left-to-right order of inheritance (B before C because class D(B, C))
+    -> Left-to-right |---->| order of inheritance (B before C because class D(B, C))
 
     -> Avoids duplicating shared ancestors (A appears only once!)
 
@@ -399,7 +404,7 @@ class BankAccount:
     def __init__(self, account_number, balance, owner: Person):  
         self.account_number = account_number
         self.balance = balance
-        self.owner = owner # Account Owner has a relationship with Person
+        self.owner = owner # Account Owner "has a" relationship with Person
 
     def withdraw(self, amount):
         self.balance -= amount
@@ -409,7 +414,7 @@ class car:
     def __init__(self, brand, model, owner: Person):
         self.brand = brand
         self.model = model
-        self.owner = owner # Car Owner has a relationship with Person
+        self.owner = owner # Car Owner "has a" relationship with Person
 
     def honk(self):
         return "Beep beep!"
@@ -421,7 +426,6 @@ Real-World Valid Examples of Multilevel Inheritance
 1. UI Frameworks
 Widget → Button → RoundedButton → AnimatedRoundedButton
 
-
 2. Exceptions in Python
 BaseException → Exception → ValueError → CustomValidationError
 
@@ -429,3 +433,117 @@ BaseException → Exception → ValueError → CustomValidationError
 File → TextFile → LogFile → RotatingLogFile
 
 """
+
+
+#Topic 5: Hierarchical Inheritance
+
+
+"""
+- Hierarchical inheritance occurs when multiple child classes inherit from a single parent class.
+     ParentClass
+     /    |    \
+ChildClass1 ChildClass2 ChildClass3
+
+syntax:
+    class ParentClass:
+        pass
+
+    class ChildClass1(ParentClass):
+        pass
+
+    class ChildClass2(ParentClass):
+        pass
+
+    class ChildClass3(ParentClass):
+        pass
+
+"""
+
+# Real-World Scenario: Different Types of Bank Accounts
+class BankAccount:
+    def __init__(self, account_number, balance):
+        self.account_number = account_number
+        self.balance = balance
+
+    def display_account_info(self):
+        return f"Account Number: {self.account_number}, Balance: {self.balance}"
+
+class SavingsAccount(BankAccount):
+    def __init__(self, account_number, balance, interest_rate):
+        super().__init__(account_number, balance)
+        self.interest_rate = interest_rate
+
+    def display_account_info(self):
+        return (super().display_account_info() +
+                f", Interest Rate: {self.interest_rate}")
+
+class CurrentAccount(BankAccount):
+    def __init__(self, account_number, balance, overdraft_limit):
+        super().__init__(account_number, balance)
+        self.overdraft_limit = overdraft_limit
+
+    def display_account_info(self):
+        return (super().display_account_info() +
+                f", Overdraft Limit: {self.overdraft_limit}")
+    
+class BusinessAccount(BankAccount):
+    def __init__(self, account_number, balance, business_name):
+        super().__init__(account_number, balance)
+        self.business_name = business_name
+
+    def display_account_info(self):
+        return (super().display_account_info() +
+                f", Business Name: {self.business_name}")
+    
+
+# Topic 6: Hybrid Inheritance
+
+"""
+Hybrid inheritance is a combination of two or more types of inheritance. 
+It can be a mix of multilevel and multiple inheritance.
+
+syntax:
+    class BaseClass:
+        pass
+    class DerivedClass1(BaseClass):
+        pass
+    class DerivedClass2(BaseClass):
+        pass
+    class DerivedClass3(BaseClass):
+        pass
+    class HybridClass(DerivedClass1, DerivedClass2):
+        pass
+        
+Diagram:
+          BaseClass
+         /         \
+DerivedClass1   DerivedClass2
+        \         /
+        HybridClass
+"""
+
+# Real-world scenario: Banking System with Logging and Serialization
+class Loggable:
+    def log(self, message):
+        print(f"Log: {message}")    
+class Serializable:
+    def to_json(self):
+        import json
+        return json.dumps(self.__dict__)
+class BankAccount(Loggable, Serializable):
+    def __init__(self, account_number, balance):
+        self.account_number = account_number
+        self.balance = balance
+        self.log("BankAccount created")
+
+    def display_account_info(self):
+        return f"Account Number: {self.account_number}, Balance: {self.balance}"
+
+
+
+#Summary of Inheritance Types:
+  #  1. Single Inheritance: One child class inherits from one parent class.
+  #  2. Multiple Inheritance: One child class inherits from multiple parent classes.
+  #  3. Multilevel Inheritance: A child class inherits from a parent class, which is also a child of another parent class.
+  #  4. Hierarchical Inheritance: Multiple child classes inherit from a single parent class.
+  #  5. Hybrid Inheritance: A combination of two or more types of inheritance.
